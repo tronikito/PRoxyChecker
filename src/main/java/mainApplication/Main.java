@@ -23,7 +23,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../mainFrame" + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("../frames/mainFrame" + ".fxml"));
 
         MainController controller = new MainController(primaryStage);
         fxmlLoader.setController(controller);
@@ -35,7 +35,6 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         controller.reloadWindow(primaryStage);
         primaryStage.show();
-
 
     }
 
