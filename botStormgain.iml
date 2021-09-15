@@ -1,75 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <exclude-output />
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_16">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lib" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/${project.build.directory}/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/${project.build.directory}/test-classes" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/javafx-sdk-11.0.2/lib" />
+          <root url="file://$MODULE_DIR$/lib/javafx-sdk-11.0.2/lib" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/javafx-sdk-11.0.2/lib" />
+          <root url="file://$MODULE_DIR$/lib/javafx-sdk-11.0.2/lib" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/javafx-sdk-11.0.2/lib" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/javafx-sdk-11.0.2/lib" recursive="false" type="SOURCES" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/javafx-sdk-11.0.2/lib" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/javafx-sdk-11.0.2/lib" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/web-driver" />
+          <root url="file://$MODULE_DIR$/lib/web-driver" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/web-driver" />
+          <root url="file://$MODULE_DIR$/lib/web-driver" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/web-driver" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/web-driver" recursive="false" type="SOURCES" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/web-driver" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/web-driver" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/commons-exec-1.3" />
+          <root url="file://$MODULE_DIR$/lib/commons-exec-1.3" />
         </CLASSES>
         <JAVADOC>
-          <root url="file://$MODULE_DIR$/commons-exec-1.3/apidocs" />
+          <root url="file://$MODULE_DIR$/lib/commons-exec-1.3/apidocs" />
         </JAVADOC>
         <SOURCES>
-          <root url="file://$MODULE_DIR$/commons-exec-1.3" />
+          <root url="file://$MODULE_DIR$/lib/commons-exec-1.3" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/commons-exec-1.3" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/commons-exec-1.3" recursive="false" type="SOURCES" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/commons-exec-1.3" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/commons-exec-1.3" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/httpcomponents" />
+          <root url="file://$MODULE_DIR$/lib/httpcomponents" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/httpcomponents" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/httpcomponents" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/guava" />
+          <root url="file://$MODULE_DIR$/lib/guava" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/guava" />
+          <root url="file://$MODULE_DIR$/lib/guava" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/guava" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/guava" recursive="false" type="SOURCES" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/guava" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/guava" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Maven: com.google.guava:guava:25.0-jre" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
+    <orderEntry type="library" name="Maven: org.checkerframework:checker-compat-qual:2.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.1.3" level="project" />
+    <orderEntry type="library" name="Maven: com.google.j2objc:j2objc-annotations:1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.mojo:animal-sniffer-annotations:1.14" level="project" />
+    <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-chrome-driver:3.141.59" level="project" />
+    <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-api:3.141.59" level="project" />
+    <orderEntry type="library" name="Maven: org.seleniumhq.selenium:selenium-remote-driver:3.141.59" level="project" />
+    <orderEntry type="library" name="Maven: net.bytebuddy:byte-buddy:1.8.15" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-exec:1.3" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.11.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.14.0" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.5" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.5" level="project" />
   </component>
 </module>
