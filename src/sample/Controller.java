@@ -53,12 +53,12 @@ public class Controller {
     @FXML
     protected Button btnSave;
     @FXML
-    protected Button btnTelnet;
+    protected Button btnTest;
     @FXML
     protected Label labelProxyNum;
 
+
     private static ArrayDeque<ProxyItem> proxyItemList;
-    private static ArrayDeque<ProxyItem> proxyCheckingItemList = new ArrayDeque<ProxyItem>();
     private static ObservableList<ProxyItem> proxyObservableList;
 
     private final String colorFail = "#bf5258";
@@ -113,7 +113,7 @@ public class Controller {
             }
         });
 
-        btnTelnet.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        btnTest.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0) {
                 try {
@@ -206,6 +206,7 @@ public class Controller {
         }
 
         checkingProxyWorking = new Thread(new WebDriverCheckerLauncher(proxyItemList,this,labelProxyNum, btnDelete));
+        Main.setThreadTestController(checkingProxyWorking);
         //checkingProxyWorking.setDaemon(true);
         checkingProxyWorking.start();
 
@@ -227,7 +228,7 @@ public class Controller {
         String header = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0";
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://app.stormgain.com/crypto-miner/"))
+                .uri(URI.create("http://www.google.com"))
                 .setHeader("User-Agent", header)
                 .GET() // GET is default
                 .build();
@@ -236,7 +237,7 @@ public class Controller {
             CompletableFuture<HttpResponse<String>> response = clientProxy.sendAsync(request,
                     HttpResponse.BodyHandlers.ofString());
 
-            String result = response.thenApply(HttpResponse::statusCode).get(5, TimeUnit.SECONDS) + "";
+            String result = response.thenApply(HttpResponse::body).get(5, TimeUnit.SECONDS) + "";
 
             System.out.println(result);
 

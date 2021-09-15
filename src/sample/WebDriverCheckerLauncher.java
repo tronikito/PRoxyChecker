@@ -13,8 +13,9 @@ public class WebDriverCheckerLauncher implements Runnable {
     private TimeWorked timeworked;
     private Label reportLabel;
     private Button btn;
+    private Thread WebDriverCheckerProxy;
 
-    public WebDriverCheckerLauncher(ArrayDeque<ProxyItem> proxyList, Controller controller, Label reportLabel, Button delete ) {
+    public WebDriverCheckerLauncher(ArrayDeque<ProxyItem> proxyList, Controller controller, Label reportLabel, Button delete) {
 
         this.btn = delete;
         this.reportLabel = reportLabel;
@@ -48,9 +49,10 @@ public class WebDriverCheckerLauncher implements Runnable {
         try {
             for (ProxyItem x : proxyList) {
 
-                Thread WebDriverCheckerProxy = new Thread(new WebDriverCheckerProxy(proxyList.pop(), proxyList, controller));
+                WebDriverCheckerProxy = new Thread(new WebDriverCheckerProxy(proxyList.pop(), proxyList, controller));
                 WebDriverCheckerProxy.start();
                 WebDriverCheckerProxy.join();
+
                 proxyChecked++;
 
                 timeworked.end();
@@ -58,7 +60,8 @@ public class WebDriverCheckerLauncher implements Runnable {
 
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            System.out.println("Launcher test Thread trying to stop before some threads end");
+            System.out.println("Thread will stop when test Threads end");
         } finally {
             timeworked.end();
             Platform.runLater(new Thread(new ReportLabel("Finish "+proxyChecked+" of "+proxySize+" in: " + timeworked.resultTime() + " (estimated) " + estimated, reportLabel)));

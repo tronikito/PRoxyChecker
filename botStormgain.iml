@@ -61,14 +61,14 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/guaba" />
+          <root url="file://$MODULE_DIR$/guava" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file://$MODULE_DIR$/guaba" />
+          <root url="file://$MODULE_DIR$/guava" />
         </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/guaba" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/guaba" recursive="false" type="SOURCES" />
+        <jarDirectory url="file://$MODULE_DIR$/guava" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/guava" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
   </component>

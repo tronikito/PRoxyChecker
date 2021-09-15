@@ -64,7 +64,10 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="btnTelnet" mnemonicParsing="false" prefHeight="25.0" prefWidth="123.0" text="Telnet" />
+            <Button fx:id="btnTest" mnemonicParsing="false" prefHeight="25.0" prefWidth="123.0" text="Test">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </HBox.margin></Button>
          </children>
          <VBox.margin>
             <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
