@@ -8,9 +8,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import mainApplication.Main;
 import mainApplication.ProxyItem;
+import mainApplication.Resources;
 import mainApplication.WebDriverCheckerLauncher;
 
 import java.io.BufferedReader;
@@ -64,8 +66,8 @@ public class MainController {
     private static ArrayDeque<ProxyItem> proxyItemList;
     private static ObservableList<ProxyItem> proxyObservableList;
 
-    private final String colorFail = "#bf5258";
-    private final String colorWork = "#5fc553";
+    private String colorFail = Resources.getColorFail();
+    private String colorWork = Resources.getColorWork();
 
     private Thread checkingProxyWorking;
 
@@ -87,13 +89,37 @@ public class MainController {
             @Override
             public void handle(MouseEvent arg0) {
 
+                FileChooser fileChooser = new FileChooser();
+                String path = null;
+
+                fileChooser.setTitle("Open Resource File");
+                fileChooser.getExtensionFilters().add(
+                        new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+
                 try {
-                    updateList(refreshTableFromTxt());
+                    File fileDir = new File(Resources.getLastFilePath());
+
+                    if (fileDir.isFile()) {
+                        fileDir = new File(fileDir.getParent());
+                    }
+
+                    fileChooser.setInitialDirectory(fileDir);
+                    path = fileChooser.showOpenDialog(stage).getPath();
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    fileChooser.setInitialDirectory(new File("./"));
+                    path = fileChooser.showOpenDialog(stage).getPath();
+                }
+
+                Main.modifyProps("lastFilePath", path);
+
+                try {
+                    updateList(refreshTableFromTxt(path));
+                    btnCheck.setDisable(false);
                 } catch (IOException e) {
                     btnCheck.setDisable(true);
                     e.printStackTrace();
                 }
-                btnCheck.setDisable(false);
+
             }
         });
 
@@ -112,7 +138,7 @@ public class MainController {
         btnDelete.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0) {
-                    deleteFailedProxy();
+                deleteFailedProxy();
             }
         });
 
@@ -147,9 +173,9 @@ public class MainController {
         listProxyTable.setMaxWidth(proxyIpSize + proxyPortSize + proxyWorkingSize);
     }
 
-    private ArrayDeque<ProxyItem> refreshTableFromTxt() throws IOException {
+    private ArrayDeque<ProxyItem> refreshTableFromTxt(String path) throws IOException {
 
-        File file = new File("proxyList.txt");
+        File file = new File(path);
         ArrayDeque<ProxyItem> listProxy = new ArrayDeque<ProxyItem>();
 
         String proxy;
@@ -202,14 +228,14 @@ public class MainController {
 
     private void checkProxyWorking() throws IOException, InterruptedException {
 
-        if (checkingProxyWorking!= null) {
+        if (checkingProxyWorking != null) {
             if (checkingProxyWorking.isAlive()) {
                 checkingProxyWorking.interrupt();
             }
         }
 
-        checkingProxyWorking = new Thread(new WebDriverCheckerLauncher(proxyItemList,this,labelProxyNum, btnDelete));
-        Main.setThreadTestController(checkingProxyWorking);
+        checkingProxyWorking = new Thread(new WebDriverCheckerLauncher(proxyItemList, this, labelProxyNum, btnDelete));
+        Resources.setThreadTestController(checkingProxyWorking);
         //checkingProxyWorking.setDaemon(true);
         checkingProxyWorking.start();
 
@@ -245,7 +271,7 @@ public class MainController {
             System.out.println(result);
 
 
-        } catch(ExecutionException | TimeoutException e) {
+        } catch (ExecutionException | TimeoutException e) {
 
             System.out.println(e.getMessage());
             System.out.println(e.getCause());
