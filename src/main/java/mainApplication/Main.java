@@ -50,7 +50,7 @@ public class Main extends Application {
 
         Properties props = new Properties();
 
-        FileInputStream in = null;
+        FileInputStream in;
         FileOutputStream out = null;
 
         try {
@@ -62,17 +62,12 @@ public class Main extends Application {
             out = new FileOutputStream(new File("config.properties"));
             props.setProperty(property, value);
             props.store(out, null);
+            out.close();
 
         } catch (FileNotFoundException e) {
             System.out.println("No config.properties file");
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                out.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
     }
@@ -87,9 +82,7 @@ public class Main extends Application {
             propertiesStream = new FileInputStream("config.properties");
             prop.load(propertiesStream);
 
-
             Field fld[] = Resources.class.getDeclaredFields();
-
 
             for (Map.Entry<Object, Object> e : prop.entrySet()) {
 
@@ -116,17 +109,6 @@ public class Main extends Application {
                     }
                 }
             }
-
-            /*
-            Resources.setColorFail((String) prop.get("colorFail"));
-            Resources.setColorWork((String) prop.get("colorWork"));
-            Resources.setWidth(Integer.parseInt(prop.get("width").toString()));
-            Resources.setHeight(Integer.parseInt(prop.get("height").toString()));
-            Resources.setLastFilePath((String) prop.get("lastFilePath"));
-
-             */
-
-
         } catch (FileNotFoundException e) {
             System.out.println("No config.properties file");
         } catch (IOException e) {

@@ -236,7 +236,6 @@ public class MainController {
 
         checkingProxyWorking = new Thread(new WebDriverCheckerLauncher(proxyItemList, this, labelProxyNum, btnDelete));
         Resources.setThreadTestController(checkingProxyWorking);
-        //checkingProxyWorking.setDaemon(true);
         checkingProxyWorking.start();
 
     }
@@ -266,7 +265,7 @@ public class MainController {
             CompletableFuture<HttpResponse<String>> response = clientProxy.sendAsync(request,
                     HttpResponse.BodyHandlers.ofString());
 
-            String result = response.thenApply(HttpResponse::body).get(5, TimeUnit.SECONDS) + "";
+            String result = response.thenApply(HttpResponse::statusCode).get(5, TimeUnit.SECONDS) + "";
 
             System.out.println(result);
 
