@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
@@ -17,22 +16,8 @@ import mainApplication.Main;
 import mainApplication.ProxyItem;
 import mainApplication.Resources;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ProxySelector;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
+import java.io.*;
 import java.util.ArrayDeque;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class MainController {
 
@@ -41,8 +26,6 @@ public class MainController {
     }
 
     protected Stage stage;
-    @FXML
-    protected VBox root;
     @FXML
     protected TableView listProxyTable;
     @FXML
@@ -62,7 +45,7 @@ public class MainController {
     @FXML
     protected ScrollPane scrollPane;
     @FXML
-    protected Button btnTest;
+    protected Button btnClear;
     @FXML
     protected TextFlow reportLabel;
 
@@ -104,7 +87,7 @@ public class MainController {
                         new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 
                 try {
-                    File fileDir = new File(Resources.getLastFilePath());
+                    File fileDir = new File(Resources.getLastLoadFilePath());
                     if (fileDir.isFile()) {
                         fileDir = new File(fileDir.getParent());
                     }
@@ -122,13 +105,13 @@ public class MainController {
                             btnCheck.setDisable(true);
                             e.printStackTrace();
                         }
-                        Main.modifyProps("lastFilePath", path);
+                        Main.modifyProps("lastLoadFilePath", path);
+                        Resources.setLastLoadFilePath(path);
                     } catch (NullPointerException e) {
                     }
                 }
             }
         });
-
 
         btnCheck.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -148,16 +131,63 @@ public class MainController {
             }
         });
 
-        btnTest.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        btnSave.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent arg0) {
+
+                FileChooser fileChooser = new FileChooser();
+                String path = null;
+
+                fileChooser.setTitle("Open Resource File");
+                fileChooser.getExtensionFilters().add(
+                        new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+
                 try {
-                    connectProxy();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    File fileDir = new File(Resources.getLastSaveFilePath());
+                    if (fileDir.isFile()) {
+                        fileDir = new File(fileDir.getParent());
+                    }
+                    fileChooser.setInitialDirectory(fileDir);
+
+
+                } catch (NullPointerException e) {
+                } finally {
+                    try {
+                        path = fileChooser.showSaveDialog(stage).getPath();
+
+                        FileOutputStream out = null;
+
+                        try {
+                            out = new FileOutputStream(new File(path));
+
+                            for (ProxyItem x : proxyItemList) {
+                                String proxy = x.getIp() + ":" + x.getPort() + System.lineSeparator();
+                                byte b[] = proxy.getBytes();
+                                out.write(b);
+                            }
+                            out.close();
+
+                        } catch (FileNotFoundException e) {
+                            System.out.println("No config.properties file");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            Main.modifyProps("lastSaveFilePath", path);
+                            Resources.setLastSaveFilePath(path);
+
+                            reportLabel.getChildren().add(new Text("Saved Proxy List in: " + path));
+                            reportLabel.getChildren().add(new Text(System.lineSeparator()));
+                        }
+                    } catch (NullPointerException e) {
+                    }
                 }
+            }
+        });
+
+        btnClear.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent arg0) {
+                clearLog();
             }
         });
     }
@@ -200,8 +230,8 @@ public class MainController {
         }
         b.close();
 
-        System.out.println(listProxy.size() + " Total Proxys in List");
-        Text t1 = new Text(listProxy.size() + " Total Proxys in List");
+        System.out.println(listProxy.size() + " Total Proxy's in List");
+        Text t1 = new Text(listProxy.size() + " Total Proxy's in List");
         reportLabel.getChildren().add(t1);
         reportLabel.getChildren().add(new Text(System.lineSeparator()));
         scrollPane.setVvalue(1.0D);
@@ -243,7 +273,7 @@ public class MainController {
             }
         }
 
-        checkingProxyWorking = new Thread(new CheckerLauncher(proxyItemList, this, reportLabel, btnDelete, scrollPane));
+        checkingProxyWorking = new Thread(new CheckerLauncher(proxyItemList, this, reportLabel, btnDelete));
         Resources.setThreadTestController(checkingProxyWorking);
         checkingProxyWorking.start();
 
@@ -252,39 +282,10 @@ public class MainController {
     private void deleteFailedProxy() {
         proxyItemList.removeIf(x -> !x.getWorking());
         updateList(proxyItemList);
+        btnSave.setDisable(false);
     }
 
-    private void connectProxy() throws IOException, InterruptedException {
-
-        HttpClient clientProxy = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .connectTimeout(Duration.ofSeconds(5))
-                .proxy(ProxySelector.of(new InetSocketAddress("185.13.113.18", 9090)))
-                .build();
-
-        String header = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0";
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://www.google.com"))
-                .setHeader("User-Agent", header)
-                .GET() // GET is default
-                .build();
-
-        try {
-            CompletableFuture<HttpResponse<String>> response = clientProxy.sendAsync(request,
-                    HttpResponse.BodyHandlers.ofString());
-
-            String result = response.thenApply(HttpResponse::statusCode).get(5, TimeUnit.SECONDS) + "";
-
-            System.out.println(result);
-
-
-        } catch (ExecutionException | TimeoutException e) {
-
-            System.out.println(e.getMessage());
-            System.out.println(e.getCause());
-        }
-
-
+    private void clearLog() {
+        reportLabel.getChildren().clear();
     }
 }

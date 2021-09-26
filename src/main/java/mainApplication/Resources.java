@@ -4,7 +4,8 @@ public abstract class Resources {
 
     private static int width = 500;
     private static int height = 720;
-    private static String lastFilePath;
+    private static String lastLoadFilePath;
+    private static String lastSaveFilePath;
     private static String colorFail = "#bf5258";
     private static String colorWork = "#5fc553";
     private static Thread threadTestController;
@@ -33,12 +34,20 @@ public abstract class Resources {
         Resources.height = height;
     }
 
-    public static String getLastFilePath() {
-        return lastFilePath;
+    public static String getLastLoadFilePath() {
+        return lastLoadFilePath;
     }
 
-    public static void setLastFilePath(String lastFilePath) {
-        Resources.lastFilePath = lastFilePath;
+    public static String getLastSaveFilePath() {
+        return lastSaveFilePath;
+    }
+
+    public static void setLastLoadFilePath(String lastLoadFilePath) {
+        Resources.lastLoadFilePath = lastLoadFilePath;
+    }
+
+    public static void setLastSaveFilePath(String lastSaveFilePath) {
+        Resources.lastSaveFilePath = lastSaveFilePath;
     }
 
     public static String getColorFail() {

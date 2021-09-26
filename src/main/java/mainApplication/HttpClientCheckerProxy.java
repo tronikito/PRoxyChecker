@@ -1,9 +1,8 @@
 package mainApplication;
 
 import javafx.application.Platform;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import mainApplication.interfaceControllers.SetLabel;
 
 import java.net.InetSocketAddress;
 import java.net.ProxySelector;
@@ -23,22 +22,17 @@ class HttpClientCheckerProxy implements Runnable {
     private ProxyItem x;
     private TextFlow reportLabel;
     private ArrayDeque<ProxyItem> proxyList;
-    private ScrollPane scrollPane;
 
-    public HttpClientCheckerProxy(ProxyItem x, ArrayDeque<ProxyItem> proxyList, TextFlow reportLabel, ScrollPane scrollPane) {
+    public HttpClientCheckerProxy(ProxyItem x, ArrayDeque<ProxyItem> proxyList, TextFlow reportLabel) {
         this.reportLabel = reportLabel;
         this.x = x;
         this.proxyList = proxyList;
-        this.scrollPane = scrollPane;
     }
 
     @Override
     public void run() {
 
         System.out.println("Start checking: " + x.getIp() + ":" + x.getPort());
-
-        //TimeWorked timeWorked = new TimeWorked();
-        //timeWorked.start();
 
         HttpClient clientProxy = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
@@ -66,21 +60,26 @@ class HttpClientCheckerProxy implements Runnable {
              result = "404";
         } finally {
 
-            //timeWorked.end();
-
             if (!result.equals("404")) reportProxy(true, result);
             else reportProxy(false, result);
 
         }
-        //controller.updateList(proxyList);
     }
 
     private void reportProxy(boolean status, String result) {
 
+        final Runnable r = new Runnable() {
+            public void run() {
+                reportLabel.getChildren().add(new Text(x.getIp() + ":" + x.getPort() + "...StatusCode: " + result + System.lineSeparator()));
+            }
+        };
+
         System.out.println(x.getIp() + ":" + x.getPort() + " | StatusCode: " + result);
-        Platform.runLater(new Thread(new SetLabel(x.getIp() + ":" + x.getPort() + "...StatusCode: " + result,reportLabel,scrollPane)));
+        Platform.runLater(new Thread(r));
         ProxyItem newProxy = new ProxyItem(x.getIp(), x.getPort(), status);
         proxyList.add(newProxy);
 
     }
+
+
 }
