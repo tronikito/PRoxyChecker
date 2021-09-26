@@ -8,12 +8,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import mainApplication.CheckerLauncher;
 import mainApplication.Main;
 import mainApplication.ProxyItem;
 import mainApplication.Resources;
-import mainApplication.WebDriverCheckerLauncher;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -58,9 +60,11 @@ public class MainController {
     @FXML
     protected Button btnSave;
     @FXML
+    protected ScrollPane scrollPane;
+    @FXML
     protected Button btnTest;
     @FXML
-    protected Label labelProxyNum;
+    protected TextFlow reportLabel;
 
 
     private static ArrayDeque<ProxyItem> proxyItemList;
@@ -72,6 +76,9 @@ public class MainController {
     private Thread checkingProxyWorking;
 
     public void initialize() {
+
+        reportLabel.heightProperty().addListener((observable, oldValue, newValue) ->
+                scrollPane.vvalueProperty().set(newValue.doubleValue()));
 
         proxyIp.setCellValueFactory(new PropertyValueFactory<ProxyItem, String>("ip"));
         proxyPort.setCellValueFactory(new PropertyValueFactory<ProxyItem, Integer>("port"));
@@ -98,28 +105,27 @@ public class MainController {
 
                 try {
                     File fileDir = new File(Resources.getLastFilePath());
-
                     if (fileDir.isFile()) {
                         fileDir = new File(fileDir.getParent());
                     }
-
                     fileChooser.setInitialDirectory(fileDir);
-                    path = fileChooser.showOpenDialog(stage).getPath();
+
                 } catch (IllegalArgumentException | NullPointerException e) {
-                    fileChooser.setInitialDirectory(new File("./"));
-                    path = fileChooser.showOpenDialog(stage).getPath();
+                    System.out.println("Not default folder found in config file");
+                } finally {
+                    try {
+                        path = fileChooser.showOpenDialog(stage).getPath();
+                        try {
+                            updateList(refreshTableFromTxt(path));
+                            btnCheck.setDisable(false);
+                        } catch (IOException e) {
+                            btnCheck.setDisable(true);
+                            e.printStackTrace();
+                        }
+                        Main.modifyProps("lastFilePath", path);
+                    } catch (NullPointerException e) {
+                    }
                 }
-
-                Main.modifyProps("lastFilePath", path);
-
-                try {
-                    updateList(refreshTableFromTxt(path));
-                    btnCheck.setDisable(false);
-                } catch (IOException e) {
-                    btnCheck.setDisable(true);
-                    e.printStackTrace();
-                }
-
             }
         });
 
@@ -195,7 +201,10 @@ public class MainController {
         b.close();
 
         System.out.println(listProxy.size() + " Total Proxys in List");
-        labelProxyNum.setText(listProxy.size() + " Total Proxys in List");
+        Text t1 = new Text(listProxy.size() + " Total Proxys in List");
+        reportLabel.getChildren().add(t1);
+        reportLabel.getChildren().add(new Text(System.lineSeparator()));
+        scrollPane.setVvalue(1.0D);
 
         return listProxy;
     }
@@ -234,7 +243,7 @@ public class MainController {
             }
         }
 
-        checkingProxyWorking = new Thread(new WebDriverCheckerLauncher(proxyItemList, this, labelProxyNum, btnDelete));
+        checkingProxyWorking = new Thread(new CheckerLauncher(proxyItemList, this, reportLabel, btnDelete, scrollPane));
         Resources.setThreadTestController(checkingProxyWorking);
         checkingProxyWorking.start();
 

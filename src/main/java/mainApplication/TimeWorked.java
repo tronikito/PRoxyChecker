@@ -3,6 +3,7 @@ package mainApplication;
 import java.util.concurrent.TimeUnit;
 
 public class TimeWorked {
+
     private long timeStart;
     private long timeEnd;
 
@@ -18,10 +19,11 @@ public class TimeWorked {
 
         String result = "";
         long resultTime = timeEnd - timeStart;
-        long convert = TimeUnit.SECONDS.convert(resultTime, TimeUnit.NANOSECONDS);
+        //long convert = TimeUnit.SECONDS.convert(Duration.ofNanos(resultTime));
+        long convert = TimeUnit.NANOSECONDS.toSeconds(resultTime);
 
         if (convert < 10) result = "0" + convert + "s";
-        else if (convert > 10 && convert < 60) result = convert + "s";
+        else if (convert >= 10 && convert <= 60) result = convert + "s";
         else if (convert > 60) {
 
             long convertS = TimeUnit.SECONDS.convert(resultTime, TimeUnit.NANOSECONDS)%60;

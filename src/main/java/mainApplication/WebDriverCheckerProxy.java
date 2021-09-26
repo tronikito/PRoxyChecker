@@ -61,12 +61,12 @@ class WebDriverCheckerProxy implements Runnable {
                 if (listOfElements.get(0).getAttribute("jsmodel") != null) {
                     System.out.println(x.getIp() + ":" + x.getPort() + ": working true");
                     ProxyItem newProxy = new ProxyItem(x.getIp(), x.getPort(), true);
-                    proxyList.remove(x);
+                    //proxyList.remove(x);
                     proxyList.add(newProxy);
                 } else {
                     System.out.println(x.getIp() + ":" + x.getPort() + " working false");
                     ProxyItem newProxy = new ProxyItem(x.getIp(), x.getPort(), false);
-                    proxyList.remove(x);
+                    //proxyList.remove(x);
                     proxyList.add(newProxy);
                 }
             } catch (Exception e) {

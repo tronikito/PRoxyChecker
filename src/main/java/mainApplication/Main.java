@@ -93,7 +93,7 @@ public class Main extends Application {
                             try {
                                 if (!e.getValue().toString().equals("")) {
                                     x.set(null, Integer.parseInt(e.getValue().toString()));
-                                    System.out.println("Variable Name is : " + e.getKey().toString() + " Value : " + e.getValue().toString());
+                                    System.out.println(e.getKey().toString() + " : " + e.getValue().toString());
                                 }
                             } catch (IllegalAccessException y) {
                             }
@@ -101,7 +101,7 @@ public class Main extends Application {
                             try {
                                 if (!e.getValue().toString().equals("")) {
                                     x.set(null, e.getValue().toString());
-                                    System.out.println("Variable Name is : " + e.getKey().toString() + " Value : " + e.getValue().toString());
+                                    System.out.println(e.getKey().toString() + " : " + e.getValue().toString());
                                 }
                             } catch (IllegalAccessException y) {
                             }
