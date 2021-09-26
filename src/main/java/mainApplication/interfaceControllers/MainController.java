@@ -77,11 +77,13 @@ public class MainController {
         proxyWorking.setCellValueFactory(new PropertyValueFactory<ProxyItem, String>("working"));
 
         stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            reloadWindow(stage);
+            if (stage.getWidth() < 500) stage.setWidth(500);
+            else reloadWindow(stage);
         });
 
         stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            reloadWindow(stage);
+            if (stage.getHeight() < 720) stage.setHeight(720);
+            else reloadWindow(stage);
         });
 
         btnLoadFile.setOnMouseClicked(new EventHandler<MouseEvent>() {
