@@ -18,6 +18,7 @@ import mainApplication.Resources;
 
 import java.io.*;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 public class MainController {
 
@@ -58,7 +59,15 @@ public class MainController {
 
     private Thread checkingProxyWorking;
 
+    private ArrayList<Button> listButton;
+
     public void initialize() {
+
+        listButton = new ArrayList<Button>();
+        listButton.add(btnDelete);
+        listButton.add(btnSave);
+        listButton.add(btnCheck);
+        listButton.add(btnLoadFile);
 
         reportLabel.heightProperty().addListener((observable, oldValue, newValue) ->
                 scrollPane.vvalueProperty().set(newValue.doubleValue()));
@@ -273,7 +282,7 @@ public class MainController {
             }
         }
 
-        checkingProxyWorking = new Thread(new CheckerLauncher(proxyItemList, this, reportLabel, btnDelete));
+        checkingProxyWorking = new Thread(new CheckerLauncher(proxyItemList, this, reportLabel, listButton));
         Resources.setThreadTestController(checkingProxyWorking);
         checkingProxyWorking.start();
 

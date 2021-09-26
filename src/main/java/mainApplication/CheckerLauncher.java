@@ -14,12 +14,12 @@ public class CheckerLauncher implements Runnable {
     private ArrayDeque<ProxyItem> proxyList;
     private MainController controller;
     private TextFlow reportLabel;
-    private Button btnDelete;
     private Thread HttpClientCheckerProxy;
+    private ArrayList<Button> listButton;
 
-    public CheckerLauncher(ArrayDeque<ProxyItem> proxyList, MainController controller, TextFlow reportLabel, Button delete) {
+    public CheckerLauncher(ArrayDeque<ProxyItem> proxyList, MainController controller, TextFlow reportLabel, ArrayList<Button> listButton) {
 
-        this.btnDelete = delete;
+        this.listButton = listButton;
         this.reportLabel = reportLabel;
         this.controller = controller;
         this.proxyList = proxyList;
@@ -28,7 +28,10 @@ public class CheckerLauncher implements Runnable {
     @Override
     public void run() {
 
-        System.out.println();
+        for (Button x : listButton) {
+            x.setDisable(true);
+        }
+
         sendTextToController(System.lineSeparator() + "Testing " + proxyList.size() + " proxy" + System.lineSeparator());
 
         int proxySize = proxyList.size();
@@ -59,7 +62,9 @@ public class CheckerLauncher implements Runnable {
             timeworked.end();
             sendTextToController("Finish " + proxyChecked + " of " + proxySize + " in: " + timeworked.resultTime());
 
-            enableBtn(btnDelete);
+            for (Button x : listButton) {
+                enableBtn(x);
+            }
         }
     }
 
